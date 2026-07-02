@@ -32,12 +32,16 @@ public class Cell : MonoBehaviour
     public void SetSymbol(string symbol)
     {
         isFilled = true;
+
         cellText.text = symbol;
+
+        button.interactable = false;
     }
 
     public void ClearCell()
     {
         isFilled = false;
         cellText.text = "";
+        button.interactable = true;
     }
 }

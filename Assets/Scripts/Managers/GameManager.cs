@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
 
     private bool gameOver = false;
 
+    private int moveCount = 0;
+
     private void Awake()
     {
         if (Instance == null)
@@ -38,16 +40,22 @@ public class GameManager : MonoBehaviour
     {0,4,8},
     {2,4,6}
 };
-
+    private bool CheckDraw()
+    {
+        return moveCount >= 9;
+    }
     public void SelectCell(int index)
     {
+
         if (gameOver)
             return;
 
         if (boardState[index] != null)
             return;
-
+        
         boardState[index] = currentPlayer;
+
+        moveCount++;
 
         string symbol = currentPlayer == PlayerType.X ? "X" : "O";
 
@@ -56,13 +64,19 @@ public class GameManager : MonoBehaviour
         if (CheckWinner())
         {
             gameOver = true;
-
             uiManager.ShowWinner(currentPlayer);
+            return;
+        }
 
+        if (CheckDraw())
+        {
+            gameOver = true;
+            uiManager.ShowDraw();
             return;
         }
 
         SwitchTurn();
+
     }
 
 
@@ -76,6 +90,7 @@ public class GameManager : MonoBehaviour
     }
     private bool CheckWinner()
     {
+
         for (int i = 0; i < winningPatterns.GetLength(0); i++)
         {
             int a = winningPatterns[i, 0];
@@ -93,5 +108,20 @@ public class GameManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void RestartGame()
+    {
+        board.ResetBoard();
+
+        boardState = new PlayerType?[9];
+
+        currentPlayer = PlayerType.X;
+
+        moveCount = 0;
+
+        gameOver = false;
+
+        uiManager.UpdateTurnText(currentPlayer);
     }
 }
