@@ -61,9 +61,19 @@ public class GameManager : MonoBehaviour
 
         board.Cells[index].SetSymbol(symbol);
 
+        if (currentPlayer == PlayerType.X)
+        {
+            AudioManager.Instance.PlayX();
+        }
+        else
+        {
+            AudioManager.Instance.PlayO();
+        }
+
         if (CheckWinner())
         {
             gameOver = true;
+            AudioManager.Instance.PlayWin();
             uiManager.ShowWinner(currentPlayer);
             return;
         }
@@ -71,6 +81,7 @@ public class GameManager : MonoBehaviour
         if (CheckDraw())
         {
             gameOver = true;
+            AudioManager.Instance.PlayDraw();
             uiManager.ShowDraw();
             return;
         }
@@ -121,6 +132,8 @@ public class GameManager : MonoBehaviour
         moveCount = 0;
 
         gameOver = false;
+
+        AudioManager.Instance.PlayRestart();
 
         uiManager.UpdateTurnText(currentPlayer);
     }

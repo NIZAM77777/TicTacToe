@@ -5,11 +5,15 @@ public class SceneLoader : MonoBehaviour
 {
     public void LoadMainMenu()
     {
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.MainMenuMusic);
+
         SceneManager.LoadScene("MainMenu");
     }
 
     public void LoadGame()
     {
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.GameplayMusic);
+
         SceneManager.LoadScene("Game");
     }
 
