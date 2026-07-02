@@ -3,6 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    public static SceneLoader Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
     public void LoadMainMenu()
     {
         AudioManager.Instance.PlayMusic(AudioManager.Instance.MainMenuMusic);
