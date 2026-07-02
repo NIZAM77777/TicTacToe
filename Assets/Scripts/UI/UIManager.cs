@@ -1,16 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private TMP_Text turnText;
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateTurnText(PlayerType player)
     {
-        
+        turnText.text = $"Player {player} Turn";
     }
 }
