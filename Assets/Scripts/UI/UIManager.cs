@@ -9,4 +9,14 @@ public class UIManager : MonoBehaviour
     {
         turnText.text = $"Player {player} Turn";
     }
+
+    public void ShowWinner(PlayerType player)
+    {
+        turnText.text = $"Player {player} Wins!";
+    }
+
+    public void ShowDraw()
+    {
+        turnText.text = "Draw!";
+    }
 }
