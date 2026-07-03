@@ -6,6 +6,7 @@ public class Cell : MonoBehaviour
 {
     [SerializeField] private Button button;
     [SerializeField] private TMP_Text cellText;
+    [SerializeField] private Shadow glowEffect;
 
     private int cellIndex;
 
@@ -19,6 +20,16 @@ public class Cell : MonoBehaviour
         button.onClick.AddListener(OnCellClicked);
 
         ClearCell();
+    }
+
+    public void ShowGlow()
+    {
+        glowEffect.enabled = true;
+    }
+
+    public void HideGlow()
+    {
+        glowEffect.enabled = false;
     }
 
     private void OnCellClicked()
@@ -43,5 +54,8 @@ public class Cell : MonoBehaviour
         isFilled = false;
         cellText.text = "";
         button.interactable = true;
+
+        HideGlow();
     }
+    
 }

@@ -114,11 +114,20 @@ public class GameManager : MonoBehaviour
             if (boardState[a] == boardState[b] &&
                 boardState[b] == boardState[c])
             {
+                HighlightWinningCells(a, b, c);
+
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void HighlightWinningCells(int a, int b, int c)
+    {
+        board.Cells[a].ShowGlow();
+        board.Cells[b].ShowGlow();
+        board.Cells[c].ShowGlow();
     }
 
     public void RestartGame()
