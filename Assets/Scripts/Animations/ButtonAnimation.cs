@@ -2,15 +2,12 @@ using UnityEngine;
 
 public class ButtonAnimation : MonoBehaviour
 {
-    private Animator animator;
-
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
+    [SerializeField] private Animator animator;
 
     public void PlayAnimation()
     {
         animator.SetTrigger("Click");
     }
+
+  
 }

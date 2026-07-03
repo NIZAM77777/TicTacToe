@@ -1571,6 +1571,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   board: {fileID: 1868128456}
   uiManager: {fileID: 1493772656}
+  gameMode: 1
+  botDifficulty: 1
 --- !u!4 &1084516132
 Transform:
   m_ObjectHideFlags: 0
@@ -1756,6 +1758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be048f28333cf8d4c9855dd2938a24e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonAnimation
+  animator: {fileID: 1104698780}
 --- !u!114 &1104698782
 MonoBehaviour:
   m_ObjectHideFlags: 0
