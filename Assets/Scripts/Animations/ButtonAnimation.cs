@@ -7,7 +7,5 @@ public class ButtonAnimation : MonoBehaviour
     public void PlayAnimation()
     {
         animator.SetTrigger("Click");
-    }
-
-  
+    }  
 }

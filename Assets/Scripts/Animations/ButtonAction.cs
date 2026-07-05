@@ -16,4 +16,5 @@ public class ButtonAction : MonoBehaviour
     {
         SceneLoader.Instance.ExitGame();
     }
+
 }

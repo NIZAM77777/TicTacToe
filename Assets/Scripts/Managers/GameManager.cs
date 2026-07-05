@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
 
     private int moveCount = 0;
 
-    [SerializeField] private GameMode gameMode;
-    [SerializeField] private BotDifficulty botDifficulty;
+    private GameMode gameMode;
+    private BotDifficulty botDifficulty;
 
     private PlayerType humanPlayer = PlayerType.X;
     private PlayerType botPlayer = PlayerType.O;
@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        gameMode = GameSettings.SelectedGameMode;
+        botDifficulty = GameSettings.SelectedBotDifficulty;
+
         uiManager.UpdateTurnText(currentPlayer);
     }
     private readonly int[,] winningPatterns =

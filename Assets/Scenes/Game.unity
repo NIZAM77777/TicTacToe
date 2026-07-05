@@ -1571,8 +1571,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   board: {fileID: 1868128456}
   uiManager: {fileID: 1493772656}
-  gameMode: 1
-  botDifficulty: 1
+  gameMode: 0
+  botDifficulty: 2
 --- !u!4 &1084516132
 Transform:
   m_ObjectHideFlags: 0
