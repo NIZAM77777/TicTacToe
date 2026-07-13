@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Board board;
     [SerializeField] private UIManager uiManager;
 
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
+
     private PlayerType currentPlayer = PlayerType.X;
 
     private PlayerType?[] boardState = new PlayerType?[9];
@@ -36,6 +39,9 @@ public class GameManager : MonoBehaviour
     {
         gameMode = GameSettings.SelectedGameMode;
         botDifficulty = GameSettings.SelectedBotDifficulty;
+
+        winPanel.SetActive(false);
+        losePanel.SetActive(false);
 
         uiManager.UpdateTurnText(currentPlayer);
     }
@@ -94,8 +100,23 @@ public class GameManager : MonoBehaviour
         if (CheckWinner())
         {
             gameOver = true;
+
             AudioManager.Instance.PlayWin();
+
+            if (gameMode == GameMode.PlayerVsPlayer)
+            {
+                winPanel.SetActive(true);
+            }
+            else
+            {
+                if (currentPlayer == humanPlayer)
+                    winPanel.SetActive(true);
+                else
+                    losePanel.SetActive(true);
+            }
+
             uiManager.ShowWinner(currentPlayer);
+
             return;
         }
 
@@ -183,6 +204,9 @@ public class GameManager : MonoBehaviour
 
         gameOver = false;
 
+        winPanel.SetActive(false);
+        losePanel.SetActive(false);
+
         AudioManager.Instance.PlayRestart();
 
         uiManager.UpdateTurnText(currentPlayer);
@@ -213,6 +237,18 @@ public class GameManager : MonoBehaviour
             gameOver = true;
 
             AudioManager.Instance.PlayWin();
+
+            if (gameMode == GameMode.PlayerVsPlayer)
+            {
+                winPanel.SetActive(true);
+            }
+            else
+            {
+                if (currentPlayer == humanPlayer)
+                    winPanel.SetActive(true);
+                else
+                    losePanel.SetActive(true);
+            }
 
             uiManager.ShowWinner(currentPlayer);
 

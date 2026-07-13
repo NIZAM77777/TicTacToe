@@ -4,6 +4,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text turnText;
+    [SerializeField] private TMP_Text winnertext;
 
     public void UpdateTurnText(PlayerType player)
     {
@@ -12,7 +13,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowWinner(PlayerType player)
     {
-        turnText.text = $"Player {player} Wins!";
+        winnertext.text = $"Player {player} Wins!";
     }
 
     public void ShowDraw()
