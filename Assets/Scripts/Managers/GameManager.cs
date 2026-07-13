@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
+    [SerializeField] private GameObject BlurImg;
 
     private PlayerType currentPlayer = PlayerType.X;
 
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
 
         winPanel.SetActive(false);
         losePanel.SetActive(false);
+        BlurImg.SetActive(false);
 
         uiManager.UpdateTurnText(currentPlayer);
     }
@@ -103,19 +105,7 @@ public class GameManager : MonoBehaviour
 
             AudioManager.Instance.PlayWin();
 
-            if (gameMode == GameMode.PlayerVsPlayer)
-            {
-                winPanel.SetActive(true);
-            }
-            else
-            {
-                if (currentPlayer == humanPlayer)
-                    winPanel.SetActive(true);
-                else
-                    losePanel.SetActive(true);
-            }
-
-            uiManager.ShowWinner(currentPlayer);
+            StartCoroutine(ShowResultAfterDelay());
 
             return;
         }
@@ -204,6 +194,7 @@ public class GameManager : MonoBehaviour
 
         gameOver = false;
 
+        BlurImg.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);
 
@@ -238,19 +229,7 @@ public class GameManager : MonoBehaviour
 
             AudioManager.Instance.PlayWin();
 
-            if (gameMode == GameMode.PlayerVsPlayer)
-            {
-                winPanel.SetActive(true);
-            }
-            else
-            {
-                if (currentPlayer == humanPlayer)
-                    winPanel.SetActive(true);
-                else
-                    losePanel.SetActive(true);
-            }
-
-            uiManager.ShowWinner(currentPlayer);
+            StartCoroutine(ShowResultAfterDelay());
 
             return;
         }
@@ -441,5 +420,31 @@ public class GameManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    private IEnumerator ShowResultAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (gameMode == GameMode.PlayerVsPlayer)
+        {
+            BlurImg.SetActive(true);
+            winPanel.SetActive(true);
+        }
+        else
+        {
+            if (currentPlayer == humanPlayer)
+            {
+                BlurImg.SetActive(true);
+                winPanel.SetActive(true);
+            }
+            else
+            {
+                BlurImg.SetActive(true);
+                losePanel.SetActive(true);
+            }
+        }
+
+        uiManager.ShowWinner(currentPlayer);
     }
 }

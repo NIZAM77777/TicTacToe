@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowWinner(PlayerType player)
     {
-        winnertext.text = $"Player {player} Wins!";
+        winnertext.text = $"{player}";
     }
 
     public void ShowDraw()
