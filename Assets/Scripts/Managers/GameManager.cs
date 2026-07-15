@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
+    [SerializeField] private GameObject drawpanel;
     [SerializeField] private GameObject BlurImg;
 
     private PlayerType currentPlayer = PlayerType.X;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
 
         winPanel.SetActive(false);
         losePanel.SetActive(false);
+        drawpanel.SetActive(false);
         BlurImg.SetActive(false);
 
         uiManager.UpdateTurnText(currentPlayer);
@@ -114,7 +116,7 @@ public class GameManager : MonoBehaviour
         {
             gameOver = true;
             AudioManager.Instance.PlayDraw();
-            uiManager.ShowDraw();
+            StartCoroutine(ShowDrawAfterDelay());
             return;
         }
 
@@ -197,6 +199,7 @@ public class GameManager : MonoBehaviour
         BlurImg.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);
+        drawpanel.SetActive(false);
 
         AudioManager.Instance.PlayRestart();
 
@@ -240,7 +243,7 @@ public class GameManager : MonoBehaviour
 
             AudioManager.Instance.PlayDraw();
 
-            uiManager.ShowDraw();
+            StartCoroutine(ShowDrawAfterDelay());
 
             return;
         }
@@ -446,5 +449,15 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.ShowWinner(currentPlayer);
+    }
+    private IEnumerator ShowDrawAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        BlurImg.SetActive(true);
+
+        drawpanel.SetActive(true);
+
+        uiManager.ShowDraw();
     }
 }
