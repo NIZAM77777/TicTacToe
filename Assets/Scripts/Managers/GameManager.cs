@@ -449,6 +449,8 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.ShowWinner(currentPlayer);
+
+        AdsManager.Instance.InterstitialController.TryShowInterstitial();
     }
     private IEnumerator ShowDrawAfterDelay()
     {
@@ -459,5 +461,7 @@ public class GameManager : MonoBehaviour
         drawpanel.SetActive(true);
 
         uiManager.ShowDraw();
+
+        AdsManager.Instance.InterstitialController.TryShowInterstitial();
     }
 }
