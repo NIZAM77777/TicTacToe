@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6e5a88c3ac5380c4faddd17f3a86245a
+guid: 9932b705e93505e4e879b57ff9ffbbed
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2389093541210892557
-    second: Tic Tac Toe Settings Panel 1_0
+      213: 8572043569924737516
+    second: RestartButton_0
+  - first:
+      213: 4018740496019847988
+    second: RestartButton_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,40 +125,49 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tic Tac Toe Settings Panel 1_0
+      name: RestartButton_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 863
-        height: 1823
+        x: 431
+        y: 448
+        width: 671
+        height: 219
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d092e03fae3c72120800000000000000
-      internalID: 2389093541210892557
+      spriteID: ce90980d53406f670800000000000000
+      internalID: 8572043569924737516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestartButton_1
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 622
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43b7dbd503f65c730800000000000000
+      internalID: 4018740496019847988
       vertices: []
       indices: 
       edges: []
@@ -164,7 +176,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7db3e61372d1fc148a91e5922efb3bb7
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tic Tac Toe Settings Panel 1_0: 2389093541210892557
+      RestartButton_0: 8572043569924737516
+      RestartButton_1: 4018740496019847988
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
