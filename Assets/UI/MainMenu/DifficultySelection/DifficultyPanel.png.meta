@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b1e902bceec22ae439bee07c09986016
+guid: 416f1fa52e128fb4d96690e9e9171056
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3967763378827857959
-    second: Tic tac Toe Mode selection_0
+      213: -7624131970542366822
+    second: DifficultyPanel_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,30 +122,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tic tac Toe Mode selection_0
+      name: DifficultyPanel_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 863
-        height: 1823
+        width: 853
+        height: 1844
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 72096db55c3501730800000000000000
-      internalID: 3967763378827857959
+      spriteID: a9f8f1ffd54a13690800000000000000
+      internalID: -7624131970542366822
       vertices: []
       indices: 
       edges: []
@@ -174,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tic tac Toe Mode selection_0: 3967763378827857959
+      DifficultyPanel_0: -7624131970542366822
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
