@@ -3,6 +3,8 @@ using UnityEngine;
 public class ModeSelectionUI : MonoBehaviour
 {
     [SerializeField] private GameObject difficultyPanel;
+    [SerializeField] private GameObject SettingsPanel;
+
 
     public void SelectPlayerVsPlayer()
     {
@@ -37,5 +39,30 @@ public class ModeSelectionUI : MonoBehaviour
         GameSettings.SelectedBotDifficulty = BotDifficulty.Hard;
 
         SceneLoader.Instance.LoadGame();
+    }
+
+    public void LoadGame()
+    {
+        SceneLoader.Instance.LoadGame();
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneLoader.Instance.LoadMainMenu();
+    }
+
+    public void ExitGame()
+    {
+        SceneLoader.Instance.ExitGame();
+    }
+
+    public void SettingsPanelOpen()
+    {
+        SettingsPanel.SetActive(true);
+    }
+
+    public void BackToMain()
+    {
+        SettingsPanel.SetActive(false);
     }
 }
