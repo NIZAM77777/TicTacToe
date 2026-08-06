@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject losePanel;
     [SerializeField] private GameObject drawpanel;
     [SerializeField] private GameObject BlurImg;
+
+    [SerializeField] private Toggle themeToggle;
 
     private PlayerType currentPlayer = PlayerType.X;
 
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
         losePanel.SetActive(false);
         drawpanel.SetActive(false);
         BlurImg.SetActive(false);
+        themeToggle.gameObject.SetActive(true);
 
         uiManager.UpdateTurnText(currentPlayer);
     }
@@ -200,6 +204,8 @@ public class GameManager : MonoBehaviour
         winPanel.SetActive(false);
         losePanel.SetActive(false);
         drawpanel.SetActive(false);
+
+        themeToggle.gameObject.SetActive(true);
 
         AudioManager.Instance.PlayRestart();
 
@@ -428,6 +434,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator ShowResultAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
+        themeToggle.gameObject.SetActive(false);
 
         if (gameMode == GameMode.PlayerVsPlayer)
         {
@@ -455,6 +462,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator ShowDrawAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
+        themeToggle.gameObject.SetActive(false);
 
         BlurImg.SetActive(true);
 
