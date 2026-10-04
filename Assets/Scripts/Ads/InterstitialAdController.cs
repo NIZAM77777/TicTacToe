@@ -5,9 +5,8 @@ public class InterstitialAdController : MonoBehaviour
 {
     private InterstitialAd interstitialAd;
 
-    // Google Test Interstitial ID
-    // Replace with your real ID before publishing.
-    private readonly string adUnitId = "ca-app-pub-1729898546273793/1438569702";
+    // Production Interstitial Ad Unit ID
+    private readonly string adUnitId = "ca-app-pub-2830084422237874/4823317309";
 
     private int completedGames = 0;
 

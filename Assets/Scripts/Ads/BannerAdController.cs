@@ -5,9 +5,8 @@ public class BannerAdController : MonoBehaviour
 {
     private BannerView bannerView;
 
-    // Google Test Banner Ad Unit ID
-    // Replace this with your real Banner ID before publishing.
-    private readonly string adUnitId = "ca-app-pub-1729898546273793/7412951116";
+    // Production Banner Ad Unit ID
+    private readonly string adUnitId = "ca-app-pub-2830084422237874/3259963358";
 
     public void LoadBanner()
     {
