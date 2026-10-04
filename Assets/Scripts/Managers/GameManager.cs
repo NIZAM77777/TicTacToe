@@ -1,36 +1,37 @@
-using UnityEngine;
+using System;
 using System.Collections;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [SerializeField] private Board board;
-    [SerializeField] private UIManager uiManager;
+    public event Action<PlayerType> TurnChanged;
+    public event Action<int, string> CellChanged;
+    public event Action BoardReset;
+    public event Action<int, int, int> WinningCellsChanged;
+    public event Action<PlayerType> GameWon;
+    public event Action GameDrawn;
 
-    [SerializeField] private GameObject winPanel;
-    [SerializeField] private GameObject losePanel;
-    [SerializeField] private GameObject drawpanel;
-    [SerializeField] private GameObject BlurImg;
-
-    [SerializeField] private Toggle themeToggle;
+    private readonly PlayerType?[] boardState = new PlayerType?[9];
+    private readonly int[,] winningPatterns =
+    {
+        { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 },
+        { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 },
+        { 0, 4, 8 }, { 2, 4, 6 }
+    };
 
     private PlayerType currentPlayer = PlayerType.X;
-
-    private PlayerType?[] boardState = new PlayerType?[9];
-
-    private bool gameOver = false;
-
-    private int moveCount = 0;
-
     private GameMode gameMode;
     private BotDifficulty botDifficulty;
-
-    private PlayerType humanPlayer = PlayerType.X;
-    private PlayerType botPlayer = PlayerType.O;
-
+    private readonly PlayerType humanPlayer = PlayerType.X;
+    private readonly PlayerType botPlayer = PlayerType.O;
+    private bool gameOver;
     private bool isBotThinking;
+    private int moveCount;
+
+    public PlayerType CurrentPlayer => currentPlayer;
+    public GameMode CurrentGameMode => gameMode;
 
     private void Awake()
     {
@@ -44,172 +45,33 @@ public class GameManager : MonoBehaviour
     {
         gameMode = GameSettings.SelectedGameMode;
         botDifficulty = GameSettings.SelectedBotDifficulty;
-
-        winPanel.SetActive(false);
-        losePanel.SetActive(false);
-        drawpanel.SetActive(false);
-        BlurImg.SetActive(false);
-        themeToggle.gameObject.SetActive(true);
-
-        uiManager.UpdateTurnText(currentPlayer);
+        TurnChanged?.Invoke(currentPlayer);
     }
-    private readonly int[,] winningPatterns =
-{
-    {0,1,2},
-    {3,4,5},
-    {6,7,8},
 
-    {0,3,6},
-    {1,4,7},
-    {2,5,8},
-
-    {0,4,8},
-    {2,4,6}
-};
-    private bool CheckDraw()
-    {
-        return moveCount >= 9;
-    }
     public void SelectCell(int index)
     {
-
-        if (gameOver)
+        if (gameOver || isBotThinking || index < 0 || index >= boardState.Length)
             return;
-
-        if (isBotThinking)
-            return;
-
-        if (gameMode == GameMode.PlayerVsBot &&
-            currentPlayer == botPlayer)
+        if (gameMode == GameMode.PlayerVsBot && currentPlayer == botPlayer)
             return;
 
         MakeMove(index);
-
-        if (boardState[index] != null)
-            return;
-        
-        boardState[index] = currentPlayer;
-
-        moveCount++;
-
-        string symbol = currentPlayer == PlayerType.X ? "X" : "O";
-
-        board.Cells[index].SetSymbol(symbol);
-
-        if (currentPlayer == PlayerType.X)
-        {
-            AudioManager.Instance.PlayX();
-        }
-        else
-        {
-            AudioManager.Instance.PlayO();
-        }
-
-        if (CheckWinner())
-        {
-            gameOver = true;
-
-            AudioManager.Instance.PlayWin();
-
-            StartCoroutine(ShowResultAfterDelay());
-
-            return;
-        }
-
-        if (CheckDraw())
-        {
-            gameOver = true;
-            AudioManager.Instance.PlayDraw();
-            StartCoroutine(ShowDrawAfterDelay());
-            return;
-        }
-
-        SwitchTurn();
-
-    }
-
-
-    private void SwitchTurn()
-    {
-        currentPlayer = currentPlayer == PlayerType.X
-            ? PlayerType.O
-            : PlayerType.X;
-
-        uiManager.UpdateTurnText(currentPlayer);
-
-        if (gameMode == GameMode.PlayerVsBot &&
-        currentPlayer == botPlayer)
-        {
-            StartCoroutine(BotTurn());
-        }
-    }
-
-    private IEnumerator BotTurn()
-    {
-        isBotThinking = true;
-
-        yield return new WaitForSeconds(0.5f);
-
-        int move = GetBotMove();
-
-        MakeMove(move);
-
-        isBotThinking = false;
-    }
-
-    private bool CheckWinner()
-    {
-
-        for (int i = 0; i < winningPatterns.GetLength(0); i++)
-        {
-            int a = winningPatterns[i, 0];
-            int b = winningPatterns[i, 1];
-            int c = winningPatterns[i, 2];
-
-            if (boardState[a] == null)
-                continue;
-
-            if (boardState[a] == boardState[b] &&
-                boardState[b] == boardState[c])
-            {
-                HighlightWinningCells(a, b, c);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void HighlightWinningCells(int a, int b, int c)
-    {
-        board.Cells[a].ShowGlow();
-        board.Cells[b].ShowGlow();
-        board.Cells[c].ShowGlow();
     }
 
     public void RestartGame()
     {
-        board.ResetBoard();
-
-        boardState = new PlayerType?[9];
+        StopAllCoroutines();
+        for (int i = 0; i < boardState.Length; i++)
+            boardState[i] = null;
 
         currentPlayer = PlayerType.X;
-
         moveCount = 0;
-
         gameOver = false;
+        isBotThinking = false;
 
-        BlurImg.SetActive(false);
-        winPanel.SetActive(false);
-        losePanel.SetActive(false);
-        drawpanel.SetActive(false);
-
-        themeToggle.gameObject.SetActive(true);
-
-        AudioManager.Instance.PlayRestart();
-
-        uiManager.UpdateTurnText(currentPlayer);
+        AudioManager.Instance?.PlayRestart();
+        BoardReset?.Invoke();
+        TurnChanged?.Invoke(currentPlayer);
     }
 
     private void MakeMove(int index)
@@ -218,90 +80,103 @@ public class GameManager : MonoBehaviour
             return;
 
         boardState[index] = currentPlayer;
-
         moveCount++;
-
-        string symbol = currentPlayer == PlayerType.X
-            ? "X"
-            : "O";
-
-        board.Cells[index].SetSymbol(symbol);
+        CellChanged?.Invoke(index, currentPlayer == PlayerType.X ? "X" : "O");
 
         if (currentPlayer == PlayerType.X)
-            AudioManager.Instance.PlayX();
+            AudioManager.Instance?.PlayX();
         else
-            AudioManager.Instance.PlayO();
+            AudioManager.Instance?.PlayO();
 
-        if (CheckWinner())
+        if (TryGetWinningCells(out int a, out int b, out int c))
         {
             gameOver = true;
-
-            AudioManager.Instance.PlayWin();
-
-            StartCoroutine(ShowResultAfterDelay());
-
+            WinningCellsChanged?.Invoke(a, b, c);
+            AudioManager.Instance?.PlayWin();
+            StartCoroutine(ShowResultAfterDelay(currentPlayer));
             return;
         }
 
-        if (CheckDraw())
+        if (moveCount >= boardState.Length)
         {
             gameOver = true;
-
-            AudioManager.Instance.PlayDraw();
-
+            AudioManager.Instance?.PlayDraw();
             StartCoroutine(ShowDrawAfterDelay());
-
             return;
         }
 
         SwitchTurn();
     }
 
+    private void SwitchTurn()
+    {
+        currentPlayer = currentPlayer == PlayerType.X ? PlayerType.O : PlayerType.X;
+        TurnChanged?.Invoke(currentPlayer);
+
+        if (gameMode == GameMode.PlayerVsBot && currentPlayer == botPlayer)
+            StartCoroutine(BotTurn());
+    }
+
+    private IEnumerator BotTurn()
+    {
+        isBotThinking = true;
+        yield return new WaitForSeconds(0.5f);
+        int move = GetBotMove();
+        isBotThinking = false;
+        if (move >= 0)
+            MakeMove(move);
+    }
+
+    private bool TryGetWinningCells(out int a, out int b, out int c)
+    {
+        for (int i = 0; i < winningPatterns.GetLength(0); i++)
+        {
+            a = winningPatterns[i, 0];
+            b = winningPatterns[i, 1];
+            c = winningPatterns[i, 2];
+            if (boardState[a] != null && boardState[a] == boardState[b] && boardState[b] == boardState[c])
+                return true;
+        }
+
+        a = b = c = -1;
+        return false;
+    }
+
     private int GetBotMove()
     {
-        switch (botDifficulty)
+        return botDifficulty switch
         {
-            case BotDifficulty.Easy:
-                return GetEasyMove();
-
-            case BotDifficulty.Medium:
-                return GetMediumMove();
-
-            case BotDifficulty.Hard:
-                return GetHardMove();
-
-            default:
-                return GetEasyMove();
-        }
+            BotDifficulty.Easy => GetEasyMove(),
+            BotDifficulty.Medium => GetMediumMove(),
+            BotDifficulty.Hard => GetHardMove(),
+            _ => GetEasyMove()
+        };
     }
 
     private int GetEasyMove()
     {
-        int randomIndex;
+        if (moveCount >= boardState.Length)
+            return -1;
 
+        int randomIndex;
         do
         {
-            randomIndex = Random.Range(0, boardState.Length);
+            randomIndex = UnityEngine.Random.Range(0, boardState.Length);
         }
         while (boardState[randomIndex] != null);
-
         return randomIndex;
     }
 
     private int GetMediumMove()
     {
         int winningMove = FindWinningMove(botPlayer);
-
         if (winningMove != -1)
             return winningMove;
 
         int blockingMove = FindWinningMove(humanPlayer);
-
-        if (blockingMove != -1)
-            return blockingMove;
-
-        return GetEasyMove();
+        return blockingMove != -1 ? blockingMove : GetEasyMove();
     }
+
     private int FindWinningMove(PlayerType player)
     {
         for (int i = 0; i < boardState.Length; i++)
@@ -310,15 +185,11 @@ public class GameManager : MonoBehaviour
                 continue;
 
             boardState[i] = player;
-
             bool canWin = HasWinner(player);
-
             boardState[i] = null;
-
             if (canWin)
                 return i;
         }
-
         return -1;
     }
 
@@ -329,15 +200,9 @@ public class GameManager : MonoBehaviour
             int a = winningPatterns[i, 0];
             int b = winningPatterns[i, 1];
             int c = winningPatterns[i, 2];
-
-            if (boardState[a] == player &&
-                boardState[b] == player &&
-                boardState[c] == player)
-            {
+            if (boardState[a] == player && boardState[b] == player && boardState[c] == player)
                 return true;
-            }
         }
-
         return false;
     }
 
@@ -345,25 +210,19 @@ public class GameManager : MonoBehaviour
     {
         int bestScore = int.MinValue;
         int bestMove = -1;
-
         for (int i = 0; i < boardState.Length; i++)
         {
             if (boardState[i] != null)
                 continue;
-
             boardState[i] = botPlayer;
-
             int score = Minimax(false);
-
             boardState[i] = null;
-
             if (score > bestScore)
             {
                 bestScore = score;
                 bestMove = i;
             }
         }
-
         return bestMove;
     }
 
@@ -371,53 +230,23 @@ public class GameManager : MonoBehaviour
     {
         if (HasWinner(botPlayer))
             return 10;
-
         if (HasWinner(humanPlayer))
             return -10;
-
         if (IsBoardFull())
             return 0;
 
-        if (isMaximizing)
+        int bestScore = isMaximizing ? int.MinValue : int.MaxValue;
+        PlayerType player = isMaximizing ? botPlayer : humanPlayer;
+        for (int i = 0; i < boardState.Length; i++)
         {
-            int bestScore = int.MinValue;
-
-            for (int i = 0; i < boardState.Length; i++)
-            {
-                if (boardState[i] != null)
-                    continue;
-
-                boardState[i] = botPlayer;
-
-                int score = Minimax(false);
-
-                boardState[i] = null;
-
-                bestScore = Mathf.Max(score, bestScore);
-            }
-
-            return bestScore;
+            if (boardState[i] != null)
+                continue;
+            boardState[i] = player;
+            int score = Minimax(!isMaximizing);
+            boardState[i] = null;
+            bestScore = isMaximizing ? Mathf.Max(score, bestScore) : Mathf.Min(score, bestScore);
         }
-        else
-        {
-            int bestScore = int.MaxValue;
-
-            for (int i = 0; i < boardState.Length; i++)
-            {
-                if (boardState[i] != null)
-                    continue;
-
-                boardState[i] = humanPlayer;
-
-                int score = Minimax(true);
-
-                boardState[i] = null;
-
-                bestScore = Mathf.Min(score, bestScore);
-            }
-
-            return bestScore;
-        }
+        return bestScore;
     }
 
     private bool IsBoardFull()
@@ -427,49 +256,20 @@ public class GameManager : MonoBehaviour
             if (boardState[i] == null)
                 return false;
         }
-
         return true;
     }
 
-    private IEnumerator ShowResultAfterDelay()
+    private IEnumerator ShowResultAfterDelay(PlayerType winner)
     {
         yield return new WaitForSeconds(0.5f);
-        themeToggle.gameObject.SetActive(false);
-
-        if (gameMode == GameMode.PlayerVsPlayer)
-        {
-            BlurImg.SetActive(true);
-            winPanel.SetActive(true);
-        }
-        else
-        {
-            if (currentPlayer == humanPlayer)
-            {
-                BlurImg.SetActive(true);
-                winPanel.SetActive(true);
-            }
-            else
-            {
-                BlurImg.SetActive(true);
-                losePanel.SetActive(true);
-            }
-        }
-
-        uiManager.ShowWinner(currentPlayer);
-
-        AdsManager.Instance.InterstitialController.TryShowInterstitial();
+        GameWon?.Invoke(winner);
+        AdsManager.Instance?.InterstitialController?.TryShowInterstitial();
     }
+
     private IEnumerator ShowDrawAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
-        themeToggle.gameObject.SetActive(false);
-
-        BlurImg.SetActive(true);
-
-        drawpanel.SetActive(true);
-
-        uiManager.ShowDraw();
-
-        AdsManager.Instance.InterstitialController.TryShowInterstitial();
+        GameDrawn?.Invoke();
+        AdsManager.Instance?.InterstitialController?.TryShowInterstitial();
     }
 }
