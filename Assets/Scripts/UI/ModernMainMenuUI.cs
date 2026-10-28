@@ -268,6 +268,9 @@ public sealed class ModernMainMenuUI : MonoBehaviour
         Image track = ModernUIFactory.CreatePanel(
             "Track", parent, new Vector2(545f, 25f), new Vector2(105f, -45f),
             new Color(0.72f, 0.79f, 0.9f, 1f), new Color(0.25f, 0.36f, 0.53f, 1f));
+        // CreatePanel uses non-interactive images by default. The slider needs
+        // both its track and handle to receive pointer events when dragging.
+        track.raycastTarget = true;
         track.GetComponent<Shadow>().enabled = false;
 
         Image fill = ModernUIFactory.CreatePanel(
@@ -283,6 +286,7 @@ public sealed class ModernMainMenuUI : MonoBehaviour
         Image handle = ModernUIFactory.CreatePanel(
             "Handle", track.transform, new Vector2(62f, 62f), Vector2.zero,
             ModernUIFactory.Blue, ModernUIFactory.Cyan, Color.white);
+        handle.raycastTarget = true;
         handle.GetComponent<Shadow>().effectDistance = new Vector2(0f, -4f);
 
         Slider slider = track.gameObject.AddComponent<Slider>();
