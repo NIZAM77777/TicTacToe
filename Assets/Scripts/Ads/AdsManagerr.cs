@@ -1,3 +1,4 @@
+#if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine;
 using GoogleMobileAds.Api;
 
@@ -36,8 +37,9 @@ public class AdsManager : MonoBehaviour
         {
             Debug.Log("Google Mobile Ads Initialized Successfully!");
 
-            bannerController.LoadBanner();
-            interstitialController.LoadInterstitial();
+            bannerController?.LoadBanner();
+            interstitialController?.LoadInterstitial();
         });
     }
 }
+#endif
